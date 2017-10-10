@@ -1,0 +1,6 @@
+---
+resources:
+- name: deploy-cf
+  type: git
+  source:
+    uri: https://github.com/tcrockett1138/concourse-deploy-cf.git
