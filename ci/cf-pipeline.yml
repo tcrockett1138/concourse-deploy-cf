@@ -35,8 +35,8 @@ jobs:
             path: concourse-deploy-cf/ci/tasks/upload-stemcell.sh
           params:
             BOSH_CA_CERT: {{BOSH_CA_CERT}}
-            BOSH_CLIENT:SECRET: {{BOSH_CLIENT_SECRET}}
-            BOSH_ENNVIRONMENT: {{BOSH_ENVIRONMENT}}
+            BOSH_CLIENT_SECRET: {{BOSH_CLIENT_SECRET}}
+            BOSH_ENVIRONMENT: {{BOSH_ENVIRONMENT}}
             BOSH_CLIENT: {{BOSH_CLIENT}}
             BOSH_DEPLOYMENT: cf
           inputs:
@@ -53,8 +53,8 @@ jobs:
             path: concourse-deploy-cf/ci/tasks/deploy-cf.sh
           params:
             BOSH_CA_CERT: {{BOSH_CA_CERT}}
-            BOSH_CLIENT:SECRET: {{BOSH_CLIENT_SECRET}}
-            BOSH_ENNVIRONMENT: {{BOSH_ENVIRONMENT}}
+            BOSH_CLIENT_SECRET: {{BOSH_CLIENT_SECRET}}
+            BOSH_ENVIRONMENT: {{BOSH_ENVIRONMENT}}
             BOSH_CLIENT: {{BOSH_CLIENT}}
             BOSH_DEPLOYMENT: cf
             SYSTEM_DOMAIN: {{system_domain}}
