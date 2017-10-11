@@ -15,13 +15,14 @@ resources:
     regexp: credentials.yml
     access_key_id: {{aws-access-key}}
     secret_access_key: {{aws-secret}}
+    region_name: us-west-2
 
 jobs:
   - name: deploy-cf
     plan:
       - get: concourse-deploy-cf
       - get: cf-deployment
-      - get: credentials
+#      - get: credentials
       
       - task: upload-stemcell
         config:
