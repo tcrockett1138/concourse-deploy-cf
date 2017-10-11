@@ -56,9 +56,10 @@ jobs:
             BOSH_ENNVIRONMENT: {{BOSH_ENVIRONMENT}}
             BOSH_CLIENT: {{BOSH_CLIENT}}
             BOSH_DEPLOYMENT: cf
-            inputs:
-            - name: concourse-deploy-cf
-            - name: cf-deployment
-            - name: credentials
+            SYSTEM_DOMAIN: {{system_domain}}
+          inputs:
+          - name: concourse-deploy-cf
+          - name: cf-deployment
+          - name: credentials
 
       - put: credentials
