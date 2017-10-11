@@ -1,6 +1,64 @@
 ---
 resources:
-- name: deploy-cf
+- name: concourse-deploy-cf
   type: git
   source:
     uri: https://github.com/tcrockett1138/concourse-deploy-cf.git
+- name: cf-deployment
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry/cf-deployment.git
+- name: credentials
+  type: s3
+  source:
+    bucket: neogrid-demo
+    regexp: credentials.yml
+    access_key_id: {{aws-access-key}}
+    secret_access_key: {{aws-secret}}
+
+jobs:
+  - name: deploy-cf
+    plan:
+      - get: concourse-deploy-cf
+      - get: cf-deployment
+      - get: credentials
+      
+      - task: upload-stemcell
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: smatyukevich/docker-cfbosh
+          run:
+            path: concourse-deploy-cf/ci/tasks/upload-stemcell.sh
+          params:
+            BOSH_CA_CERT: {{BOSH_CA_CERT}}
+            BOSH_CLIENT:SECRET: {{BOSH_CLIENT_SECRET}}
+            BOSH_ENNVIRONMENT: {{BOSH_ENVIRONMENT}}
+            BOSH_CLIENT: {{BOSH_CLIENT}}
+            BOSH_DEPLOYMENT: cf
+          inputs:
+          - name: concourse-deploy-cf
+
+      - task: deploy-cf
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: smatyukevich/docker-cfbosh
+          run:
+            path: concourse-deploy-cf/ci/tasks/deploy-cf.sh
+          params:
+            BOSH_CA_CERT: {{BOSH_CA_CERT}}
+            BOSH_CLIENT:SECRET: {{BOSH_CLIENT_SECRET}}
+            BOSH_ENNVIRONMENT: {{BOSH_ENVIRONMENT}}
+            BOSH_CLIENT: {{BOSH_CLIENT}}
+            BOSH_DEPLOYMENT: cf
+            inputs:
+            - name: concourse-deploy-cf
+            - name: cf-deployment
+            - name: credentials
+
+      - put: credentials
