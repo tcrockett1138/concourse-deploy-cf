@@ -12,7 +12,8 @@ resources:
   type: s3
   source:
     bucket: neogrid-demo
-    regexp: credentials.yml
+  #    regexp: credentials-(.*).yml
+    versioned_file: credentials.yml 
     access_key_id: {{aws-access-key}}
     secret_access_key: {{aws-secret}}
     region_name: us-west-2
@@ -22,7 +23,7 @@ jobs:
     plan:
       - get: concourse-deploy-cf
       - get: cf-deployment
-#      - get: credentials
+      - get: credentials
       
       - task: upload-stemcell
         config:
@@ -50,7 +51,7 @@ jobs:
             source:
               repository: smatyukevich/docker-cfbosh
           run:
-            path: concourse-deploy-cf/ci/tasks/deploy-cf.sh
+            path: concourse-deploy-cf/ci/tasks/deploy.sh
           params:
             BOSH_CA_CERT: {{BOSH_CA_CERT}}
             BOSH_CLIENT_SECRET: {{BOSH_CLIENT_SECRET}}
