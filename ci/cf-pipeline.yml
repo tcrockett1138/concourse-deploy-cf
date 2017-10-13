@@ -13,7 +13,7 @@ resources:
   source:
     bucket: neogrid-demo
   #    regexp: credentials-(.*).yml
-    versioned_file: credentials.yml 
+    versioned_file: cf/credentials.yml 
     access_key_id: {{aws-access-key}}
     secret_access_key: {{aws-secret}}
     region_name: us-west-2
@@ -65,3 +65,5 @@ jobs:
           - name: credentials
 
       - put: credentials
+      params:
+        file: cf/credentials.yml

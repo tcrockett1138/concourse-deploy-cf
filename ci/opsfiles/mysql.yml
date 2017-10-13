@@ -1,0 +1,120 @@
+---
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf-mysql-broker
+    azs: [z1]
+    instances: 1
+    vm_type: m3.large
+    stemcell: default
+    networks:
+    - name: default
+    jobs:
+    - name: cf-mysql-broker
+      release: cf-mysql
+      properties:
+        cf:
+          api_url: "https://api.((system_domain))"
+          skip_ssl_validation: true
+        cf_mysql:
+          external_host: "cf-mysql.((system_domain))"
+          mysql:
+            persistent_disk: 100000
+            admin_password: "((cf_mysql_mysql_admin_password))"
+          broker:
+            auth_password: "((cf_mysql_broker_auth_password))"
+            cookie_secret: "((cf_mysql_broker_cookie_secret))"
+            db_password: "((cf_mysql_broker_db_password))"
+            quota_enforcer:
+              password: "((cf_mysql_quota_enforcer_password))"
+            ssl_enabled: false
+            services: &services
+            - name: mysql
+              plan_updateable: true
+              id: 44b26033-1f54-4087-b7bc-da9652c2a539
+              description: MySQL databases on demand
+              tags: [mysql]
+              metadata:
+                displayName: MySQL
+                longDescription: "MySQL service for application development and testing."
+              dashboard_client:
+                id: mysql
+                secret: "((cf_mysql_dashboard_client_secret))"
+              plans:
+              - name: 512mb
+                id: ab08f1bc-e6fc-4b56-a767-ee0fea6e3f20
+                description: MySQL Server
+                max_storage_mb: 512
+                max_user_connections: 10
+              - name: 1gb
+                id: 11d0aa36-dcec-4021-85f5-ea4d9a5c8342
+                description: MySQL Server
+                max_storage_mb: 1024
+                max_user_connections: 20
+    - name: route_registrar
+      release: routing
+      consumes:
+        nats: {from: nats, deployment: cf}
+      properties:
+        route_registrar:
+          routes:
+          - name: cf-mysql
+            port: 8081
+            registration_interval: 20s
+            uris:
+            - "cf-mysql.((system_domain))"
+
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf-mysql-broker-registrar
+    lifecycle: errand
+    azs: [z1]
+    instances: 1
+    vm_type: m3.large
+    stemcell: default
+    networks:
+    - name: default
+    jobs:
+    - name: broker-registrar
+      release: cf-mysql
+      properties:
+        cf:
+          api_url: "https://api.((system_domain))"
+          skip_ssl_validation: true
+          admin_username: admin
+          admin_password: "((uaa_scim_users_admin_password))"
+        cf_mysql:
+          external_host: "cf-mysql.((system_domain))"
+          broker:
+            protocol: http
+            port: 80
+            auth_password: "((cf_mysql_broker_auth_password))"
+            services: *services
+
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_mysql_broker_auth_password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_mysql_broker_db_password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_mysql_broker_cookie_secret
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_mysql_quota_enforcer_password
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: cf_mysql_dashboard_client_secret
+    type: password
