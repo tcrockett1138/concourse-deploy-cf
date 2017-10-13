@@ -2,6 +2,14 @@
 - type: replace
   path: /instance_groups/-
   value:
+    name: cf-mysql
+    jobs:
+      - name: cf-mysql-broker-user
+        release: cf-mysql
+
+- type: replace
+  path: /instance_groups/-
+  value:
     name: cf-mysql-broker
     azs: [z1]
     instances: 1
@@ -20,7 +28,7 @@
           external_host: "cf-mysql.((system_domain))"
           mysql:
             persistent_disk: 100000
-            admin_password: "((cf_mysql_mysql_admin_password))"
+#            admin_password: "((cf_mysql_mysql_admin_password))"
           broker:
             auth_password: "((cf_mysql_broker_auth_password))"
             cookie_secret: "((cf_mysql_broker_cookie_secret))"
