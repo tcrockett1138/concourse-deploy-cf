@@ -14,7 +14,6 @@ resources:
   type: s3
   source:
     bucket: neogrid-demo
-  #    regexp: credentials-(.*).yml
     versioned_file: cf/credentials.yml 
     access_key_id: {{aws-access-key}}
     secret_access_key: {{aws-secret}}
@@ -25,7 +24,7 @@ jobs:
     plan:
       - get: concourse-deploy-cf
       - get: cf-deployment
-#      - get: credentials
+      - get: credentials
       
       - task: upload-stemcell
         config:
@@ -64,7 +63,7 @@ jobs:
           inputs:
           - name: concourse-deploy-cf
           - name: cf-deployment
-#          - name: credentials
+          - name: credentials
 
       - put: credentials
         params:
