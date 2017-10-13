@@ -25,7 +25,7 @@ jobs:
     plan:
       - get: concourse-deploy-cf
       - get: cf-deployment
-      - get: credentials
+#      - get: credentials
       
       - task: upload-stemcell
         config:
@@ -64,7 +64,7 @@ jobs:
           inputs:
           - name: concourse-deploy-cf
           - name: cf-deployment
-          - name: credentials
+#          - name: credentials
 
       - put: credentials
         params:
