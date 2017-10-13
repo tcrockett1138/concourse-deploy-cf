@@ -65,5 +65,5 @@ jobs:
           - name: credentials
 
       - put: credentials
-      params:
-        file: cf/credentials.yml
+        params:
+          file: cf/credentials.yml
