@@ -1,8 +1,7 @@
 ---
 - type: replace
-  path: /instance_groups/mysql/-
+  path: /instance_groups/mysql/jobs/-
   value:
-    name: jobs
     - name: cf-mysql-broker-user
       release: cf-mysql
 
