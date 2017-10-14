@@ -1,8 +1,7 @@
 ---
 - type: replace
-  path: /mysql/-
+  path: /mysql/jobs/-
   value:
-    name: jobs
     - name: cf-mysql-broker-user
       release: cf-mysql
 
