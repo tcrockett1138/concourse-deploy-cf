@@ -65,8 +65,8 @@ jobs:
           - name: cf-deployment
           - name: credentials
           outputs:
-            - name: new-credentials
+            - name: credentials-generated
 
-      - put: credentials
+      - put: credentials-generated
         params:
           file: credentials/credentials.yml
