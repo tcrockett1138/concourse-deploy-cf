@@ -1,11 +1,17 @@
 ---
 - type: replace
-  path: /instance_groups/-
+  path: /instance_groups/name=mysql/jobs/-
   value:
     name: mysql
-    jobs:
       - name: cf-mysql-broker-user
         release: cf-mysql
+        consumes:
+          broker: {from: broker-link}
+
+- type: replace
+  path: /instance_groups/name=mysql/jobs/name=mysql/provides?
+  value:
+    mysql: {as: mysql-link}
 
 - type: replace
   path: /instance_groups/-
@@ -20,6 +26,10 @@
     jobs:
     - name: cf-mysql-broker
       release: cf-mysql
+      consumes:
+        mysql: {from: mysql-link}
+      provides:
+        broker: {as: broker-link}
       properties:
         cf:
           api_url: "https://api.((system_domain))"
