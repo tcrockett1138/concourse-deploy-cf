@@ -65,7 +65,7 @@ jobs:
           - name: cf-deployment
           - name: credentials
           outputs:
-          - name: credentials
+            - name: new-credentials
 
       - put: credentials
         params:
