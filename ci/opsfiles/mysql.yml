@@ -101,7 +101,7 @@
           api_url: "https://api.((system_domain))"
           skip_ssl_validation: true
           admin_username: admin
-          admin_password: "((uaa_scim_users_admin_password))"
+          admin_password: "((cf_admin_password))"
         cf_mysql:
           external_host: "cf-mysql.((system_domain))"
           broker:
