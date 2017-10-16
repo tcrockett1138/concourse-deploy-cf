@@ -67,6 +67,6 @@ jobs:
           outputs:
             - name: credentials-generated
 
-      - put: credentials-generated
+      - put: credentials
         params:
           file: credentials/credentials.yml
