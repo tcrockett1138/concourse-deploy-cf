@@ -64,6 +64,8 @@ jobs:
           - name: concourse-deploy-cf
           - name: cf-deployment
           - name: credentials
+          outputs:
+            name: credentials
 
       - put: credentials
         params:
